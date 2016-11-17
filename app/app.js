@@ -1,8 +1,3 @@
-/*
-Here is where you set up your server file.
-express middleware.
-*/
-
 var express = require('express');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
@@ -23,7 +18,7 @@ app.engine('handlebars', exphbs({
 }));
 app.set('view engine', 'handlebars');
 
-var routes = require('./controllers/sumo.js');
+var routes = require('./controllers/sumo_controller.js');
 app.use('/', routes);
 
 var port = 3000;
