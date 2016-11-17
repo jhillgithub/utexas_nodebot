@@ -1,0 +1,28 @@
+{
+  "name": "utexas_nodebot",
+  "version": "1.0.0",
+  "description": "Node controller for Sumo robot using node, express, handlebars, sequelize",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jhillgithub/utexas_nodebot.git"
+  },
+  "keywords": [
+    "Node",
+    "Nodebot",
+    "Sumo",
+    "Robotics"
+  ],
+  "author": "Jeremy Hill",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jhillgithub/utexas_nodebot/issues"
+  },
+  "homepage": "https://github.com/jhillgithub/utexas_nodebot#readme",
+  "dependencies": {
+    "opencv": "^6.0.0"
+  }
+}
