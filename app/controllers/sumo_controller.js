@@ -41,7 +41,7 @@ router.post('/api', function (req, res) {
       sumo_api.longJump();
       break;
     case "startVideo":
-      sumo_api.startVideo();
+      sumo_api.startVideo(socket);
       break;
     case "test":
       sumo_api.test();

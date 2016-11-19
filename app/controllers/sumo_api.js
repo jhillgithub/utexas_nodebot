@@ -1,23 +1,54 @@
 var sumo = require('node-sumo');
 var cv = require('opencv');
 
-var drone;
-drone = sumo.createClient();
-
-drone.on("battery", function(battery) {
-  console.log("battery: " + battery);
+var drone = sumo.createClient();
+drone.connect(function() {
+  console.log("Connected...");
 });
-
 var video = drone.getVideoStream();
 var buf = null;
-var w = new cv.NamedWindow("Video", 0);
+var w = new cv.NamedWindow("Video", '0');
 
 video.on("data", function(data) {
   buf = data;
 });
 
+// var camera = new cv.VideoCapture("Video");
+// camera.setWidth(320);
+// camera.setHeight(240);
+
+// setInterval(function() {
+//   if (buf == null) {
+//    return;
+//   }
+//
+//   try {
+//     cv.readImage(buf, function(err, im) {
+//       if (err) {
+//         console.log(err);
+//       } else {
+//         if (im.width() < 1 || im.height() < 1) {
+//           console.log("no width or height");
+//           return;
+//         }
+//         w.show(im);
+//         w.blockingWaitKey(0, 50);
+//       }
+//     });
+//   } catch(e) {
+//     console.log(e);
+//   }
+// }, 100);
+
+
+drone.on("battery", function(battery) {
+  console.log("battery: " + battery);
+});
+
 var connect = function() {
-  drone.connect();
+  drone.connect(function() {
+    console.log("Connected...");
+  });
 };
 
 var forward = function() {
@@ -61,30 +92,47 @@ var longJump = function() {
   drone.animationsLongJump();
 };
 
-var startVideo = function() {
+var startVideo = function(socket) {
   setInterval(function() {
-    if (buf == null) {
-     return;
-    }
-
+    // camera.read(function(err, im) {
     try {
       cv.readImage(buf, function(err, im) {
         if (err) {
           console.log(err);
-        } else {
-          if (im.width() < 1 || im.height() < 1) {
-            console.log("no width or height");
-            return;
-          }
-          w.show(im);
-          w.blockingWaitKey(0, 50);
         }
-      });
-    } catch(e) {
-      console.log(e);
-    }
-  }, 100);
+        socket.emit('frame', { buffer: im.toBuffer() });
+      })
+      } catch(e) {
+        console.log(e);
+      }
+    }, 100)
+
+  // setInterval(function() {
+  //   if (buf == null) {
+  //    return;
+  //   }
+  //
+  //   try {
+  //     cv.readImage(buf, function(err, im) {
+  //       if (err) {
+  //         console.log(err);
+  //       } else {
+  //         if (im.width() < 1 || im.height() < 1) {
+  //           console.log("no width or height");
+  //           return;
+  //         }
+  //         w.show(im);
+  //         w.blockingWaitKey(0, 50);
+  //       }
+  //     });
+  //   } catch(e) {
+  //     console.log(e);
+  //   }
+  // }, 100);
 };
+
+
+
 
 
 var sumo = {

@@ -22,4 +22,15 @@ var routes = require('./controllers/sumo_controller.js');
 app.use('/', routes);
 
 var port = 3000;
-app.listen(port);
+var server = app.listen(port);
+
+// var http = require('http');
+// var server = http.createServer(app);
+// server.listen(port, function() {
+//   console.log('HTTP server listening on port ' + port);
+// })
+
+var sumo_api = require('./controllers/sumo_api.js');
+
+var io = require('socket.io')(server);
+io.on('connection', sumo_api.startVideo);
