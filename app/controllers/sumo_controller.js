@@ -14,6 +14,10 @@ router.get('/', function (req, res) {
   res.render('index');
 });
 
+router.get('/leap', function (req, res) {
+  res.render('sumoLeap');
+});
+
 router.post('/api', function (req, res) {
   // req.params.control
   console.log(req.body);
@@ -31,11 +35,14 @@ router.post('/api', function (req, res) {
     case "left":
       sumo_api.left();
       break;
-    case "left":
-      sumo_api.left();
-      break;
     case "right":
       sumo_api.right();
+      break;
+    case "tap":
+      sumo_api.tap();
+      break;
+    case "spin":
+      sumo_api.spin();
       break;
     case "longJump":
       sumo_api.longJump();

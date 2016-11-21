@@ -52,39 +52,71 @@ var connect = function() {
 };
 
 var forward = function() {
-  drone.postureJumper();
-  drone.forward(50);
+  setTimeout(function() {
+    console.log("Moving forward...")
+    drone.postureJumper();
+    drone.forward(50);
+  }, 0);
 
   setTimeout(function() {
+    console.log("Stopping motion...")
     drone.stop();
   }, 1000);
 };
 
 var backward = function() {
-  drone.postureJumper();
-  drone.backward(50);
+  setTimeout(function() {
+    console.log("Moving backward...")
+    drone.postureJumper();
+    drone.backward(50);
+  }, 0);
 
   setTimeout(function() {
+    console.log("Stopping motion...")
     drone.stop();
   }, 1000);
 };
 
 var left = function() {
-  drone.postureJumper();
-  drone.left(50);
+  setTimeout(function() {
+    console.log("Moving left...")
+    drone.postureJumper();
+    drone.left(50);
+  }, 0);
 
   setTimeout(function() {
+    console.log("Stopping motion...")
     drone.stop();
   }, 100);
 };
 
 var right = function() {
-  drone.postureJumper();
-  drone.right(50);
+  setTimeout(function() {
+    console.log("Moving right...")
+    drone.postureJumper();
+    drone.right(50);
+  }, 0);
 
   setTimeout(function() {
+    console.log("Stopping motion...")
     drone.stop();
   }, 100);
+};
+
+var tap = function() {
+  setTimeout(function() {
+    console.log("I've been hit...")
+    drone.postureJumper();
+    drone.animationsTap();
+  }, 0);
+};
+
+var spin = function() {
+  setTimeout(function() {
+    console.log("I'm dead...")
+    drone.postureJumper();
+    drone.animationsSpin();
+  }, 0);
 };
 
 var longJump = function() {
@@ -141,6 +173,8 @@ var sumo = {
   backward: backward,
   left: left,
   right: right,
+  tap: tap,
+  spin: spin,
   longJump: longJump,
   startVideo: startVideo,
   test: function() {console.log("test")}

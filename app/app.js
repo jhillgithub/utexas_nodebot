@@ -30,7 +30,7 @@ var server = app.listen(port);
 //   console.log('HTTP server listening on port ' + port);
 // })
 
-var sumo_api = require('./controllers/sumo_api.js');
-
-var io = require('socket.io')(server);
-io.on('connection', sumo_api.startVideo);
+// var sumo_api = require('./controllers/sumo_api.js');
+//
+// var io = require('socket.io')(server);
+// io.on('connection', sumo_api.startVideo);

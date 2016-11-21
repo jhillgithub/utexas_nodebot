@@ -1,0 +1,70 @@
+<div id="main">
+    <h3>Movement:</h3>
+    <div id="movement"></div>
+    <div style="clear:both;"></div>
+    <h3>Direction:</h3>
+    <div id="direction"></div>
+    <div style="clear:both;"></div>
+</div>
+<script>
+    var controller = Leap.loop({});
+
+    controller.on('frame', function(frame) {
+        if (frame.hands[0]) {
+            var hand = frame.hands[0];
+            handleSwipe(hand);
+        }
+    });
+
+    /**
+     * Handle swipe by translating movement coordinates to a direction
+     * @param {object} hand - The first detected hand
+    **/
+    var handleSwipe = function(hand) {
+        // The translation object is the change in position of the hand
+        // between the current frame and the specified frame.
+        // The returned translation vector provides the magnitude and
+        // direction of the movement in millimeters.
+        var previousFrame = controller.frame(1);
+        var movement = hand.translation(previousFrame);
+        $("#movement").text(movement);
+        var direction = '?';
+
+        if (movement[0] > 4) {
+            direction = 'RIGHT'
+        } else if (movement[0] < -4) {
+            direction = 'LEFT'
+        } else if (movement[1] > 4) {
+            direction = 'UP'
+        } else if (movement[1] < -4) {
+            direction = 'DOWN'
+        } else if (movement[2] > 4) {
+            direction = 'REVERSE'
+        } else if (movement[2] < -4) {
+            direction = 'FORWARD'
+        }
+
+        // switch (direction) {
+        //     case 'FORWARD':
+        //         controlHandler()
+        //         break;
+        //     case 'REVERSE':
+        //         break;
+        //     case 'LEFT':
+        //         break;
+        //     case 'RIGHT':
+        //         break;
+        // }
+        if (direction !== '?'){
+          $("#direction").text(direction);
+          // controlHandler(direction.toLowerCase());
+        }
+        console.log('Direction: ' + direction);
+    }
+
+    function controlHandler(val) {
+      $.post(currentURL + "/api", {control: val}, function(response) {
+        console.log(response);
+      })
+    }
+</script>
