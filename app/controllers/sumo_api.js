@@ -5,13 +5,6 @@ var drone = sumo.createClient();
 drone.connect(function() {
   console.log("Connected...");
 });
-var video = drone.getVideoStream();
-var buf = null;
-var w = new cv.NamedWindow("Video", '0');
-
-video.on("data", function(data) {
-  buf = data;
-});
 
 // var camera = new cv.VideoCapture("Video");
 // camera.setWidth(320);
@@ -125,19 +118,57 @@ var longJump = function() {
 };
 
 var startVideo = function(socket) {
-  setInterval(function() {
-    // camera.read(function(err, im) {
+  var video = drone.getVideoStream();
+  var buf = null;
+  var w = new cv.NamedWindow("Video", '0');
+  var broadcasting = false;
+  // face detection properties
+  var rectColor = [0, 255, 0];
+  var rectThickness = 2;
+  
+  console.log('listening for data');
+  video.on("data", function(data) {
+    console.log('got data', new Date());
+    buf = data;
+
     try {
       cv.readImage(buf, function(err, im) {
         if (err) {
           console.log(err);
         }
-        socket.emit('frame', { buffer: im.toBuffer() });
+
+        im.detectObject(cv.FACE_CASCADE, {}, function(err, faces) {
+               if (err) throw err;
+
+               for (var i = 0; i < faces.length; i++) {
+                 face = faces[i];
+                 im.rectangle([face.x, face.y], [face.width, face.height], rectColor, rectThickness);
+               }
+
+               socket.emit('frame', { buffer: im.toBuffer() });
+        });
+
+        // socket.emit('frame', { buffer: im.toBuffer() });
       })
-      } catch(e) {
-        console.log(e);
-      }
-    }, 100)
+    } catch(e) {
+      console.log(e);
+    }
+  });
+
+  // broadcasting = true;
+  // setInterval(function() {
+  //   // camera.read(function(err, im) {
+  //   try {
+  //     cv.readImage(buf, function(err, im) {
+  //       if (err) {
+  //         console.log(err);
+  //       }
+  //       socket.emit('frame', { buffer: im.toBuffer() });
+  //     })
+  //     } catch(e) {
+  //       console.log(e);
+  //     }
+  //   }, 100)
 
   // setInterval(function() {
   //   if (buf == null) {

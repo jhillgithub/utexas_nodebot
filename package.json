@@ -24,6 +24,7 @@
   "homepage": "https://github.com/jhillgithub/utexas_nodebot#readme",
   "dependencies": {
     "node-sumo": "git+https://github.com/forgeByAcision/node-sumo.git",
+    "node-uuid": "^1.4.7",
     "opencv": "^6.0.0"
   }
 }
