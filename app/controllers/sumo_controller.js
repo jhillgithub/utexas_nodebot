@@ -8,7 +8,7 @@ var express = require('express');
 var router = express.Router();
 var sumo_api = require('./sumo_api.js');
 console.log(sumo_api);
-// var sumo = require('../../models/sumo.js');
+var sumoModel = require("../../models")["Sumo"];
 
 router.get('/', function (req, res) {
   res.render('index');
@@ -16,6 +16,35 @@ router.get('/', function (req, res) {
 
 router.get('/leap', function (req, res) {
   res.render('sumoLeap');
+});
+
+router.get('/detections', function (req, res) {
+
+  sumoModel.findAll({})
+  .then(function(data){
+    var detections = [];
+    console.log("findall", data);
+    data.forEach(function(each) {
+      var detection = {
+        'id': each.id,
+        'image': each.image,
+        'date': each.createdAt,
+      }
+      detections.push(detection);
+    })
+    return res.json(detections);
+    });
+});
+
+router.get('/detection/:id', function (req, res) {
+  sumoModel.findOne({
+    where: {
+      id: req.params.id
+    }
+  }).then(function(data) {
+    console.log(data);
+    return res.redirect(data.image);
+  })
 });
 
 router.post('/api', function (req, res) {

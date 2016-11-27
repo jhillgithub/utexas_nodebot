@@ -1,10 +1,22 @@
 var sumo = require('node-sumo');
 var cv = require('opencv');
+var sumoModel = require("../../models")["Sumo"];
 
 var drone = sumo.createClient();
 drone.connect(function() {
   console.log("Connected...");
 });
+
+var fpsInterval = 1000/10;
+var buf = null;
+var w = new cv.NamedWindow("Video", '0');
+var broadcasting = false;
+// face detection properties
+var rectColor = [0, 255, 0];
+var rectThickness = 2;
+var saveDisabled = false;
+var saveDelay = 2000;
+var uuid = require('node-uuid');
 
 // var camera = new cv.VideoCapture("Video");
 // camera.setWidth(320);
@@ -119,18 +131,26 @@ var longJump = function() {
 
 var startVideo = function(socket) {
   var video = drone.getVideoStream();
-  var buf = null;
-  var w = new cv.NamedWindow("Video", '0');
-  var broadcasting = false;
-  // face detection properties
-  var rectColor = [0, 255, 0];
-  var rectThickness = 2;
-  
+
+
   console.log('listening for data');
+
+
   video.on("data", function(data) {
     console.log('got data', new Date());
     buf = data;
 
+    broadcasting = true;
+
+  });
+
+  console.log('starting processVideo');
+  setInterval(function() {
+
+    if (buf == null) {
+       return;
+    }
+    // console.log("buffer", buf);
     try {
       cv.readImage(buf, function(err, im) {
         if (err) {
@@ -144,16 +164,25 @@ var startVideo = function(socket) {
                  face = faces[i];
                  im.rectangle([face.x, face.y], [face.width, face.height], rectColor, rectThickness);
                }
-
+               if (faces.length > 0 && saveDisabled == false) {
+                 console.log("saving detection");
+                 var uuid1 = uuid.v1();
+                 saveDisabled = true;
+                 setTimeout(function(){saveDisabled = false;}, saveDelay);
+                 var imgPath = '/assets/images/detection_' + uuid1 + '.jpg'
+                 im.save('./public' + imgPath);
+                 sumoModel.create({
+                   'image': imgPath
+                 });
+               }
                socket.emit('frame', { buffer: im.toBuffer() });
         });
-
-        // socket.emit('frame', { buffer: im.toBuffer() });
       })
     } catch(e) {
       console.log(e);
     }
-  });
+  }, fpsInterval)
+
 
   // broadcasting = true;
   // setInterval(function() {
@@ -194,7 +223,9 @@ var startVideo = function(socket) {
   // }, 100);
 };
 
+function processVideo() {
 
+}
 
 
 

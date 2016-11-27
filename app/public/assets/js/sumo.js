@@ -23,6 +23,7 @@ context.fillStyle = '#333';
 context.fillText('Loading...', canvas.width/2-30, canvas.height/3);
 
 socket.on('frame', function(data) {
+  console.log('frame');
   var uint8Arr = new Uint8Array(data.buffer);
   var str = String.fromCharCode.apply(null, uint8Arr);
   var base64String = btoa(str);

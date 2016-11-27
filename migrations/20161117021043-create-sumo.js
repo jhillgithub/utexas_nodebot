@@ -8,16 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      botname: {
-        type: Sequelize.STRING
-      },
-      battery: {
-        type: Sequelize.STRING
-      },
-      images: {
-        type: Sequelize.STRING
-      },
-      video: {
+      image: {
         type: Sequelize.STRING
       },
       createdAt: {
