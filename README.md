@@ -1,7 +1,7 @@
 # utexas_nodebot
 ## Node MVC controller for Sumo Robot
 
-### This project was an experience in Javascript Robotics and provides the following capabilites:
+### This project was an experiment in Javascript Robotics and provides the following capabilites:
 1. Control the movement of a Parrot Sumo Robot through a client web application using Node and Express.
 2. Control the movement of the robot using a leap motion controller through a custom gesture api.
 3. Apply facial recognition on a live video stream in real-time using opencv.
